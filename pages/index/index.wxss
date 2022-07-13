@@ -1,19 +1,16 @@
-/**index.wxss**/
-.userinfo {
+@import "../lib/weui.wxss";
+.container{
+  padding: 10rpx 0;
+}
+.picker{
+    /* padding: 13px; */
+    background-color: #FFFFFF;
+}
+.intro {
+  margin: 30px;
+  text-align: center;
+}
+.section{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #aaa;
-}
-
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.usermotto {
-  margin-top: 200px;
+  align-items:center;
 }

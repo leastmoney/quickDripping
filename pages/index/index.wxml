@@ -1,23 +1,57 @@
-<!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
-    <block wx:if="{{canIUseOpenData}}">
-      <view class="userinfo-avatar" bindtap="bindViewTap">
-        <open-data type="userAvatarUrl"></open-data>
+  <view class="page-body">
+    <form bindsubmit="formSubmit" catchreset="formReset">
+    <view class="topImg" style="text-align:center"><image src="../static/chahua.png" style="height:147px"></image></view> 
+    <!-- 开始时间 -->
+    <view class="section" style="display:flex;justify-content:space-between;padding:20rpx 30rpx;background:#fff;margin-top:20rpx;border-radius:24rpx;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.30);">
+      <view class="section__title">开始时间</view>
+        <picker style="width:70%" name="startTime" mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+        <view class="picker" style="text-align:right">
+        {{time}}
+        </view>
+        </picker>
+    </view>
+      <!-- 注射液毫升 -->
+      <view class="page-section page-section-gap" style="display:flex;flex-direction:column;margin-top:20rpx;padding:10rpx 30rpx;background:#fff;border-radius:24rpx;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.30);">
+        <view class="page-section-title">注射液毫升（ml）</view>
+        <view style="display:flex;margin:20rpx;align-items：center;justify-content:space-between">
+          <view style="width:150rpx;height:70rpx;color:{{mlIndex==100?'#DA78F8':'#000'}};border:{{mlIndex==100?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu" data-index="100">100ml</view>
+          <view style="width:150rpx;height:70rpx;color:{{mlIndex==250?'#DA78F8':'#000'}};border:{{mlIndex==250?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu" data-index="250">250ml</view>
+          <view style="width:150rpx;height:70rpx;color:{{mlIndex==500?'#DA78F8':'#000'}};border:{{mlIndex==500?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu" data-index="500">500ml</view>
+        </view>
       </view>
-      <open-data type="userNickName"></open-data>
-    </block>
-    <block wx:elif="{{!hasUserInfo}}">
-      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
-    </block>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+
+      <!-- 滴速(滴/分) -->
+      <view class="page-section" style="margin-top:20rpx;display:flex;flex-direction:column;justify-content:space-between;padding:10rpx 30rpx;background:#fff;border-radius:24rpx;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.30);">
+        <view class="page-section-title">常用滴速(滴/分)</view>
+        <view style=" width:560rpx;display:flex;margin:20rpx;align-items:none;justify-content:space-between;flex-wrap:wrap">
+          <view style="margin:5rpx;width:170rpx;height:70rpx;color:{{disuIndex==40?'#DA78F8':'#000'}};border:{{disuIndex==40?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="40">40</view>
+          <view style="margin:5rpx;width:170rpx;height:70rpx;color:{{disuIndex==50?'#DA78F8':'#000'}};border:{{disuIndex==50?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="50">50</view>
+          <view style="margin:5rpx;width:170rpx;height:70rpx;color:{{disuIndex==60?'#DA78F8':'#000'}};border:{{disuIndex==60?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="60">60</view>
+        </view>
+      </view>
+      <view class="page-section" style="margin-top:20rpx;display:flex;flex-direction:column;justify-content:space-between;padding:10rpx 30rpx;background:#fff;border-radius:24rpx;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.30);">
+        <view class="page-section-title">其他滴速(滴/分)</view>
+        <view style=" width:560rpx;display:flex;margin:20rpx;align-items:none;justify-content:space-between;flex-wrap:wrap">
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==20?'#DA78F8':'#000'}};border:{{disuIndex==20?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="20">20</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==30?'#DA78F8':'#000'}};border:{{disuIndex==30?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="30">30</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==36?'#DA78F8':'#000'}};border:{{disuIndex==36?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="36">36</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==42?'#DA78F8':'#000'}};border:{{disuIndex==42?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="42">42</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==48?'#DA78F8':'#000'}};border:{{disuIndex==48?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="48">48</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==54?'#DA78F8':'#000'}};border:{{disuIndex==54?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="54">54</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==58?'#DA78F8':'#000'}};border:{{disuIndex==58?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="58">58</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==66?'#DA78F8':'#000'}};border:{{disuIndex==66?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="66">66</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==70?'#DA78F8':'#000'}};border:{{disuIndex==70?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="70">70</view>
+          <view style="margin:5rpx;width:90rpx;height:70rpx;color:{{disuIndex==80?'#DA78F8':'#000'}};border:{{disuIndex==80?'2px solid #da78f8':'2px solid #ECECEC'}};border-radius: 10px;text-align:center;line-height:70rpx" bindtap="chooseDisu2" data-index="80">80</view>
+        </view>
+      </view>
+      <view class="btn-area" style="display:flex;justify-content:space-between;margin-top:20rpx;padding:20rpx 30rpx;background:#fff;border-radius:24rpx;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.30);">
+        结束时间<span>{{showTime}}</span>
+      </view>
+      <view class="btn-area" style="display:flex;margin-top:40rpx;justify-content:space-between;">
+        <button style="color:#DA78F8;font-size:18px;margin:0;width:300rpx;height:90rpx;background:#fbfbfb;border:2px solid #da78f8;border-radius:10px;box-shadow:0px 2px 8px 0px rgba(0,0,0,0.23);" type="reset" formType="reset">重置</button>
+        <button style="color:#FFFFFF;font-size:18px;margin:0;width:300rpx;height:90rpx;background: #fbfbfb;border:2px solid #da78f8;background:linear-gradient(133deg,#f28ef6 0%, #bb5cfa 100%);border-radius: 10px;box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.23)" formType="submit">确定</button>
+      </view>
+    </form>
   </view>
 </view>

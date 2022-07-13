@@ -1,48 +1,74 @@
 // index.js
 // 获取应用实例
 const app = getApp()
-
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    canIUseGetUserProfile: false,
-    canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName') // 如需尝试获取用户信息可改为false
+    //m默认时间
+    time: '12:00',
+    mlIndex: -1,
+    disuIndex: -1,
+    showTime: '',
   },
-  // 事件处理函数
-  bindViewTap() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
-  onLoad() {
-    if (wx.getUserProfile) {
-      this.setData({
-        canIUseGetUserProfile: true
-      })
-    }
-  },
-  getUserProfile(e) {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
+  formSubmit: function (e) {
+    if( this.data.time==''||this.data.mlIndex==-1||this.data.disuIndex==-1){
+      wx.showToast({
+        //弹出的内容 这种可以写很多内容
+          title: '请填写完整的参数',
+          icon:"none",
+          //持续时间
+          duration:2000
         })
+    }else{
+    wx.request({
+      url: 'https://www.quickdripping.top/quickDripping/calculateEndTime', //请求接口的url
+      method: 'POST', //请求方式
+      data: {
+        "drippingSpeed": this.data.disuIndex,
+        "milliliter": this.data.mlIndex,
+        "startTime": this.data.time
+      },//请求参数格式为json
+      header: {
+          'content-type': 'application/json' // 默认值
+      },
+      complete() {  //请求结束后隐藏 loading 提示框
+          wx.hideLoading();
+      },
+      success: res => {
+        console.log(res.data.message)
+          this.setData({
+              showTime: res.data.message,
+          })
       }
+  });}
+  },
+  formReset: function () {
+    console.log('form发生了reset事件，')
+    this.setData({
+      time: '12:00',
+      mlIndex: -1,
+      disuIndex: -1,
+      showTime: '',
     })
   },
-  getUserInfo(e) {
-    // 不推荐使用getUserInfo获取用户信息，预计自2021年4月13日起，getUserInfo将不再弹出弹窗，并直接返回匿名的用户个人信息
-    console.log(e)
+  bindTimeChange: function (e) {
     this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+      time: e.detail.value
     })
-  }
-})
+  },
+  chooseDisu: function (e) {
+    console.log(e.currentTarget.dataset['index']);
+    let query = e.currentTarget.dataset['index']
+	  // 根据传参键值，获取点击事件传来的image值
+    this.setData({
+      mlIndex: query
+    })
+  },
+  chooseDisu2: function (e) {
+    let query = e.currentTarget.dataset['index']
+	  // 根据传参键值，获取点击事件传来的image值
+    this.setData({
+      disuIndex: query
+    })
+  },
+}
+)
